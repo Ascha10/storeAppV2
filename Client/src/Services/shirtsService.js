@@ -1,4 +1,4 @@
-export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://store-app-x.herokuapp.com/api' :  'http://localhost:9000/api';
+export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://storeapp2-x.herokuapp.com/api' :  'http://localhost:9000/api';
 
 export const getShirts = async () => {
    try {
