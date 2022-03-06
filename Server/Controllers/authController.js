@@ -89,13 +89,16 @@ const handleErrors = (err) => {
 // }
 
 let signupPost = async (req,res)=>{
-  if(await User.exists({email:req.body.email})) return res.status(400).send({message:"Email Exists"}); //if email exist return exist ;
-  //hash func gets 3args 1.what to encode 2.salt 3. callback for logic
-  bcrypt.hash(req.body.password,10,async (err,hashPassword)=>{
-      if(err) return res.status(500).send({message:"this is an error"});
-      req.body.password= hashPassword // takes the old pass and encrypt it!
+  const {email,password} = req.body;
+
+  if(await User.exists({email:email})) return res.status(400).send({message:"Email Already Exists"});
+
+  bcrypt.hash(password,10,async (err,hashPassword) => {
+      if(err) return res.status(500).send({message: err});
+
+      req.body.password = hashPassword;
       await  User.create(req.body) 
-          .then(result=> res.status(200).send({message:"User hes been Added",result}))
+          .then(result=> res.status(200).send({message:"User has been Added",result}))
           .catch(err=> res.status(500).send(err))
   })
 }
