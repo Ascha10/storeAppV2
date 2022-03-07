@@ -1,7 +1,6 @@
 const User = require('../Models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
 
 // handle errors
 const handleErrors = (err) => {
@@ -16,77 +15,13 @@ const handleErrors = (err) => {
 
   // validation errors
   if (err.message.includes('user validation failed')) {
-    // console.log(err);
     Object.values(err.errors).forEach(({ properties }) => {
-      // console.log(val);
-      // console.log(properties);
       errors[properties.path] = properties.message;
     });
   }
   return errors;
 }
 
-
-// let signupPost = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   try {
-    
-//     const hashedPwd = await bcrypt.hash(password, 10);
-//     //create and store the new user
-//     const user = await User.create({email, password : hashedPwd});
-//     user.isLogin = true;
-//     await user.save();
-
-//     // const accessToken = jwt.sign({"userInfo": {"email": user.email,"role": user.role}},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '15m' });
-//     //     // res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 ,secure: true }); 
-//     // res.cookie('JWT', accessToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 ,secure: true }); 
-
-//     res.json({ accessToken});
-
-//     return res.status(201).send(user);
-
-//   } catch (err) {
-//     console.log(err);
-//     // res.status(400).send('error,The User Not Created');
-//     const errors = handleErrors(err);
-//     res.status(400).json({ errors });
-//   }
-// }
-
-// let loginPost = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const user = await User.findOne({ email: email });
-//     console.log(user);
-
-//     if (user) {
-//           const match = await bcrypt.compare(password,user.password);
-//           if (match) {
-          
-//             // const accessToken = jwt.sign({"userInfo": {"email": user.email,"role": user.role}},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '1H' });
-//             // const refreshToken = jwt.sign({"userInfo": {"email": user.email,"role": user.role }},process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1d' });
-//             jwt.sign({...user},process.env.SECRET_KEY,{expiresIn:'30m'})
-//             // Saving refreshToken with current user
-//             // user.refreshToken = refreshToken;
-//             user.isLogin = true;
-//             await user.save();
-          
-//             // res.cookie('JWT', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 ,secure: true }); 
-//             // res.cookie('JWT', accessToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 ,secure: true }); 
-//             // return res.json({ accessToken});
-          
-//           }else{
-//              return res.send({message : "Incorrect Password"}); 
-//           }
-
-//     } else {
-//       return res.send({message : "Incorrect Email"});
-//     }
-//   } catch (error) {
-//     return res.status(201).json({error});
-//   }
-// }
 
 let signupPost = async (req,res)=>{
   const {email,password} = req.body;
@@ -104,20 +39,21 @@ let signupPost = async (req,res)=>{
 }
 
 let loginPost  = async (req,res)=>{
-  //checks if this email exist or not 
   if(User.exists(req.body.email) == false) return res.status(400).send({message:"User not exist"});
-  //the mail and user we gets from the client
-  const {email,password}=req.body;
-  //findOne gets obj
+
+  const {email,password} = req.body;
+
   await User.findOne({email})
   .then(user=> {
       bcrypt.compare(password ,user.password,(err,isMatch)=>{
       if(err) return res.status(400).send({message:"error in pas"})
       if(!isMatch) return res.status(403).send({message:"Password incorrect"})
-      //jwt.sign gets args 1.payload 2.secret 3.obj of timing 4.callback
-      jwt.sign({...user},process.env.SECRET_KEY,{expiresIn:'30m'},(err,accessToken)=>{
-          if(err) return res.status(400).send({message:"Error"})
+
+      jwt.sign({email : user.email,id : user._id,role: user.role},process.env.SECRET_KEY,{expiresIn:'30m'},(err,accessToken)=>{
+          if(err) return res.status(400).send({Error:`${err}`})
           res.status(200).send({message:"Login Sucssefuly",accessToken});
+          user.isLogin = true;
+          user.save();
       })
   })
   })
@@ -128,29 +64,13 @@ let loginPost  = async (req,res)=>{
 
 let logout = async (req, res) => {
 
-    const cookies = req.cookies;
-    console.log(cookies);
-    if (!cookies?.JWT) return res.sendStatus(204); //No content
-    // const refreshToken = cookies.JWT;
-    // console.log(refreshToken);
-    // Is refreshToken in db?
-    // const foundUser = await User.findOne({ refreshToken }).exec();
-    // const foundUser = await User.findOne({ refreshToken : refreshToken });
-    // console.log(foundUser);
+    await User.findOne({ _id : req.params.id}).then((user) => {
+      user.isLogin = false;
+      user.save();
+      console.log(user);
+    })
 
-    // if (!foundUser) {
-    //     res.clearCookie('JWT', { httpOnly: true, sameSite: 'None', secure: true });
-    //     return res.sendStatus(204);
-    // }
-
-    // Delete refreshToken in db
-    // foundUser.refreshToken = '';
-    foundUser.isLogin = false;
-    const result = await foundUser.save();
-    console.log(result);
-
-    res.clearCookie('JWT', { httpOnly: true, sameSite: 'None', secure: true });
-    res.sendStatus(204);
+     res.send({message:'The Token removed successfully'});
 }
 
 module.exports = {

@@ -2,7 +2,7 @@ export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://storeapp2
 
 export const getShirts = async () => {
    try {
-      return await fetch(`${basicUrl}/shirts`)//Authorization : 'Bearer '+res.cookie("jwt") 
+      return await fetch(`${basicUrl}/shirts`)
          .then(res => res.json())
 
    } catch (error) {

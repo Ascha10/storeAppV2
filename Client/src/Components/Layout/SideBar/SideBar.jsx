@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import useLogout from '../../Logout/useLogout';
 
-
-
 export default function SideBar() {
   const logout = useLogout();
 

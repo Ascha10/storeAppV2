@@ -2,6 +2,8 @@ import { useContext,useState } from 'react';
 import { authContext } from '../../../Context/AuthProvider/AuthProvider';
 import { getUser } from '../../../Services/usersService';
 import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from '../../../Utils/setAuthToken';
 
 export default function Login() {
 
@@ -21,9 +23,15 @@ export default function Login() {
     .then((data) => {
       console.log(data);
       if(data.accessToken){
-        // setAuth({email:data.email,role:data.role,accessToken :data.accessToken});
-        setAuth({accessToken : data.accessToken});
-        console.log(auth);
+          localStorage.setItem('jwtToken', data.accessToken);
+
+          setAuthToken(data.accessToken);
+          const decodedUserInfo = jwt_decode(data.accessToken);
+          setAuth(decodedUserInfo)
+          console.log(decodedUserInfo);
+          console.log(auth);
+
+        // setAuth({email:data.email,role:data.role});
         navigate('/');
       }
 
