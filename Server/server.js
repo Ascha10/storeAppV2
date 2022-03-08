@@ -9,11 +9,9 @@ const authRoutes = require('./Routes/Api/auth');
 const passport = require('passport')
 require('./Config/passport')(passport);
 
-
-
-// app.use(cors({credentials : true,origin: ['http://localhost:3000'],SupportsCredentials : true,allowedHeaders : ['GET', 'POST', 'PUT', 'DELETE']}));
-// app.use(cors({credentials : true,origin: ['http://localhost:3000'],SupportsCredentials : true,allowedHeaders : ['GET', 'POST', 'PUT', 'DELETE']}));
 app.use(cors());
+
+
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
@@ -42,9 +40,4 @@ if (process.env.NODE_ENV === 'production'){
         res.sendFile(path.join(__dirname, '../Client/build','index.html'))
     });
 }
-// } else {
-//     app.get('/', (req,res) =>{
-//         res.send("Api running")
-//     })
-// }
 

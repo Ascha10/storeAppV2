@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import setAuthToken from '../../Utils/setAuthToken';
 
 
-const useLogout = (id) => {
+const useLogout = () => {
     const {auth,setAuth} = useContext(authContext); 
     const navigate = useNavigate()
 

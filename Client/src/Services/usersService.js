@@ -1,13 +1,11 @@
 import { basicUrl } from './shirtsService'
 
-
 export const getUser = async (user) => {
 
    let options = {
       method: "POST",
       body: JSON.stringify(user),
-      headers: { 'Content-Type': 'application/json'}//'Authorization': 'Bearer JWT'
-      // credentials: 'include'
+      headers: { 'Content-Type': 'application/json'}
    }
 
    try {
