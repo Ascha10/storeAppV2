@@ -1,26 +1,41 @@
 import axios from "axios";
-export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://storeapp2-x.herokuapp.com/api' :  'http://localhost:9000/api';
-// export const getShirts = async () => {
-//    try {
-//       return await fetch(`${basicUrl}/shirts`)
-//          .then(res => res.json())
+export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://storeapp2-x.herokuapp.com/api' : 'http://localhost:9000/api';
 
-//    } catch (error) {
-//       console.log("Error", error)
-//    }
-// }
 export const getShirts = async () => {
+   let options = {
+      headers: {
+         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+      }
+   }
+
    try {
-     await axios.get(`${basicUrl}/shirts`)
-      .then(res => res.json())
+      return await fetch(`${basicUrl}/shirts`, options)
+         .then(res => res.json())
+
    } catch (error) {
       console.log("Error", error)
    }
 }
 
+// export const getShirts = async () => {
+//    try {
+//      await axios.get(`${basicUrl}/shirts`)
+//       .then(res => res.json())
+//    } catch (error) {
+//       console.log("Error", error)
+//    }
+// }
+
 
 
 export const getShirtById = async (id) => {
+
+   let options = {
+      headers: {
+         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+      }
+   }
+
    try {
       return await fetch(`${basicUrl}/shirts/${id}`)
          .then(res => res.json())
@@ -33,7 +48,10 @@ export const addShirt = async (shirt) => {
    let options = {
       method: "POST",
       body: JSON.stringify(shirt),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+         'Content-Type': 'application/json',
+         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+      }
    }
    try {
       return await fetch(`${basicUrl}/shirts`, options)
@@ -47,7 +65,10 @@ export const updateShirt = async (shirt, id) => {
    let options = {
       method: "PUT",
       body: JSON.stringify(shirt),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+         'Content-Type': 'application/json',
+         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+      }
    }
    try {
       return await fetch(`${basicUrl}/shirts/${id}`, options)
@@ -60,7 +81,10 @@ export const updateShirt = async (shirt, id) => {
 export const deletShirt = async (id) => {
    let options = {
       method: "DELETE",
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+         'Content-Type': 'application/json',
+         Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
+      }
    }
    try {
       return await fetch(`${basicUrl}/shirts/${id}`, options)
