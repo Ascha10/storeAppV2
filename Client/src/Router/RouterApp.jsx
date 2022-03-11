@@ -7,6 +7,7 @@ import Footer from '../Components/Layout/Footer/Footer';
 import SignUp from '../Components/Pages/SignUp/SignUp';
 import Login from '../Components/Pages/Login/Login';
 import {AuthProvider} from '../Context/AuthProvider/AuthProvider'
+import Page404 from '../Components/Pages/Page 404/Page404';
 
 
 
@@ -21,7 +22,7 @@ export default function RouterApp() {
                 <Route exact path="/Shirts" element={<Shirts/>}/>
                 <Route exact path="/SignUp" element={<SignUp/>}/>
                 <Route exact path="/Login" element={<Login/>}/>
-                {/* <Route exact path="*" element={<NotFound/>}/> */}
+                <Route exact path="*" element={<Page404/>}/>
             </Routes>
             <Footer/>
         </Router>

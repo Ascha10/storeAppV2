@@ -3,7 +3,6 @@ import { authContext } from '../../../Context/AuthProvider/AuthProvider';
 import { getUser } from '../../../Services/usersService';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import setAuthToken from '../../../Utils/setAuthToken';
 
 export default function Login() {
 
@@ -24,15 +23,12 @@ export default function Login() {
       console.log(data);
       if(data.accessToken){
           localStorage.setItem('jwtToken', data.accessToken);
-
-          setAuthToken(data.accessToken);
           const decodedUserInfo = jwt_decode(data.accessToken);
           setAuth(decodedUserInfo)
           console.log(decodedUserInfo);
           console.log(auth);
 
-        // setAuth({email:data.email,role:data.role});
-        navigate('/');
+        navigate('/shirts');
       }
 
     }).catch((err) => {

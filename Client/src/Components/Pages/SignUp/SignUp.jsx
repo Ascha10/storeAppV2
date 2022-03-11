@@ -1,17 +1,15 @@
 import { useState,useContext } from 'react'
 import { addUser } from '../../../Services/usersService';
-// import { authContext } from '../../../Context/AuthProvider/AuthProvider';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function SignUp() {
 
-    // const {auth,setAuth} = useContext(authContext);
-
     let [email,setEmail] = useState("");
     let [password,setPassword] = useState("");
+    let [error,setError] = useState("");
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
 
     let submitForm = async (e) => {
@@ -21,29 +19,13 @@ export default function SignUp() {
         await addUser({email,password})
         .then((data) => {
             console.log(data);
+            navigate('/login');
 
-            // if(data.accessToken){
-            // //   setAuth({email:data.email,role:data.role,accessToken :data.accessToken});
-            //   setAuth({accessToken :data.accessToken});
-            //   console.log(auth);
-            // //   console.log(result);
-            //   navigate('/');
-            // }
         }).catch((err) => {
+                setError(err);
                 console.log(err);
-            })
-            
-            // if(data.accessToken){
-            //   // setAuth(data.user.id,data.user.roles, data.user.accessToken);
-            //   setAuth({email:data.email,role:data.role,accessToken :data.accessToken});
-            //   console.log(auth);
-            // //   console.log(result);
-            //   navigate('/');
-            // }
+        })
 
-        // }).catch((err) => {
-        //     console.log(err);
-        // })
         console.log(email);
         console.log(password);
     }
@@ -68,7 +50,7 @@ export default function SignUp() {
                 <label>Password</label>
                 <input type="password" onChange={passwordHendler} required/>
                 <div className='passwordError'></div>
-
+                
                 <button>Submit</button>
             </form>
 

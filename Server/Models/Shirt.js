@@ -29,6 +29,6 @@ const ShirtSchema = new mongoose.Schema ({
 
 })
 
-const Shirt = mongoose.model("Shirt",ShirtSchema); //mongoDB ploralize the collection name, behind the sene there is class
+const Shirt = mongoose.model("Shirt",ShirtSchema); 
 
 module.exports = Shirt;

@@ -1,4 +1,3 @@
-import axios from "axios";
 export let basicUrl = process.env.NODE_ENV === 'production' ? 'https://storeapp2-x.herokuapp.com/api' : 'http://localhost:9000/api';
 
 export const getShirts = async () => {
@@ -16,16 +15,6 @@ export const getShirts = async () => {
       console.log("Error", error)
    }
 }
-
-// export const getShirts = async () => {
-//    try {
-//      await axios.get(`${basicUrl}/shirts`)
-//       .then(res => res.json())
-//    } catch (error) {
-//       console.log("Error", error)
-//    }
-// }
-
 
 
 export const getShirtById = async (id) => {
