@@ -50,7 +50,7 @@ export default function Login() {
     <section>
       <h1>Login</h1>
 
-      <form action="" onSubmit={(e) => { submitForm(e) }}>
+      <form action="" autoComplete='true' onSubmit={(e) => { submitForm(e) }}>
 
         <label>Email</label>
         <input type="text" onChange={emailHendler} required />

@@ -41,7 +41,7 @@ export default function SignUp() {
         <section>
             <h1>SignUp</h1>
 
-            <form action=""  onSubmit={(e) => {submitForm(e)}}>
+            <form action="" autoComplete='true'  onSubmit={(e) => {submitForm(e)}}>
 
                 <label>Email</label>
                 <input type="text" onChange={emailHendler} required/>
